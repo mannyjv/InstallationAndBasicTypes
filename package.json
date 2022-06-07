@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run start-server & npm run build-watch",
     "build-watch": "webpack -w",
-    "start-server": "nodemon server --ignore public"
+    "start-server": "nodemon server --ignore public",
+    "seed": "psql -d wildcodeschool -a -f ./seed.sql"
   },
   "keywords": [],
   "author": "",
