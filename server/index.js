@@ -1,39 +1,40 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-// const { db, Contact } = require('./db');
+const client = require('./db');
 const app = express();
 const PORT = 3000;
 
-// Logging middleware
 app.use(morgan('dev'));
 
-// Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static middleware
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.get('/api/contacts', async (req, res, next) => {
+app.get('/api/argonautes', async (req, res, next) => {
   try {
-    const contacts = await Contact.findAll({
-      attributes: ['id', 'name', 'email', 'phone'],
-    });
-    res.json(contacts);
+    const data = await client.query('SELECT * FROM argonautes');
+    res.send(data.rows);
   } catch (err) {
     next(err);
   }
 });
 
-// app.get('/api/contacts/:contactId', async (req, res, next) => {
-//   try {
-//     const contact = await Contact.findByPk(req.params.contactId);
-//     res.json(contact);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+app.post('/api/argonautes', async (req, res) => {
+  try {
+    const newArgonaute = req.body.name;
+
+    let data = await client.query(
+      'INSERT INTO argonautes (name) VALUES ($1) RETURNING *',
+      [newArgonaute]
+    );
+
+    res.send(data.rows);
+  } catch (error) {
+    res.status(500).send(`Something went wrong: ${error}`);
+  }
+});
 
 // For all GET requests that aren't to an API route,
 // we will send the index.html! . we dont have any changing views, this is the html sheet that gets served all the time
@@ -54,17 +55,6 @@ app.use((err, req, res, next) => {
   res.send(err.message || 'Internal server error');
 });
 
-(async function startServer() {
-  try {
-    // await db.sync();
-    // console.log('The database is synced!');
-    app.listen(PORT, () =>
-      console.log(`
-        Listening on port ${PORT}
-        http://localhost:3000/
-      `)
-    );
-  } catch (err) {
-    console.error(err);
-  }
-})();
+app.listen(PORT, () => {
+  console.log(`App listening in port ${PORT}`);
+});

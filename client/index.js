@@ -11,23 +11,27 @@ class App extends Component {
     this.state = {
       argonautes: [],
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addArgonaute = this.addArgonaute.bind(this);
   }
   async componentDidMount() {
     try {
-      // const response = await axios.get('/api/argonautes');
-      // const argonautes = response.data;
-      // this.setState({
-      //   argonautes: argonautes,
-      // });
+      const response = await axios.get('/api/argonautes');
+      const argonautes = response.data;
+      this.setState({
+        argonautes,
+      });
     } catch (err) {
       console.log('There was a problem getting the argonautes!');
     }
   }
 
-  async handleSubmit(argonaute) {
+  async addArgonaute(a) {
     try {
-      // const response = await axios.post('/api/argonautes');
+      const response = await axios.post('/api/argonautes', { name: a });
+      const newArgonaute = await response.data[0];
+      this.setState({
+        argonautes: [...this.state.argonautes, newArgonaute],
+      });
     } catch (err) {
       console.log('There was a problem adding a argonaute!');
     }
@@ -38,7 +42,7 @@ class App extends Component {
         <Header />
         <MainSection
           listOfArgonautes={this.state.argonautes}
-          handleSubmit={this.handleSubmit}
+          addArgonaute={this.addArgonaute}
         />
         <Footer />
       </div>

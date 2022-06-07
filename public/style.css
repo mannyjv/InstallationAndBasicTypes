@@ -1,5 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); */
 
+* {
+  /* include padding and borders when setting element widths */
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -25,10 +30,6 @@ main {
   font-size: 2.5em;
 }
 
-/* footer {
-  background:
-} */
-
 h1,
 h2 {
   text-align: center;
@@ -47,12 +48,19 @@ button {
   text-align: center;
 }
 
+.member-list {
+  display: flex;
+  justify-content: space-around;
+}
+
 .member-item {
   padding: 0.25em 0;
+  flex: 1;
+  margin-bottom: 0.2em;
 }
 
 #footer {
-  margin-top: 2em;
+  margin-top: 5em;
   text-align: center;
   color: #fff;
   background: #f76c6c;
