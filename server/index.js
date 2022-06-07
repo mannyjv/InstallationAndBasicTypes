@@ -8,7 +8,6 @@ const PORT = 3000;
 app.use(morgan('dev'));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
@@ -35,12 +34,6 @@ app.post('/api/argonautes', async (req, res) => {
     res.status(500).send(`Something went wrong: ${error}`);
   }
 });
-
-// For all GET requests that aren't to an API route,
-// we will send the index.html! . we dont have any changing views, this is the html sheet that gets served all the time
-// app.get('/*', (req, res, next) => {
-//   res.sendFile(path.join(__dirname, '..', 'index.html'));
-// });
 
 // Handle 404s
 app.use((req, res, next) => {
